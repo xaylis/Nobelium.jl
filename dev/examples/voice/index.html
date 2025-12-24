@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><title>Voice · Nobelium.jl</title><meta name="title" content="Voice · Nobelium.jl"/><meta property="og:title" content="Voice · Nobelium.jl"/><meta property="twitter:title" content="Voice · Nobelium.jl"/><meta name="description" content="Documentation for Nobelium.jl."/><meta property="og:description" content="Documentation for Nobelium.jl."/><meta property="twitter:description" content="Documentation for Nobelium.jl."/><meta property="og:url" content="https://xaylis.github.io/Nobelium.jl/examples/voice/"/><meta property="twitter:url" content="https://xaylis.github.io/Nobelium.jl/examples/voice/"/><link rel="canonical" href="https://xaylis.github.io/Nobelium.jl/examples/voice/"/><script data-outdated-warner src="../../assets/warner.js"></script><link href="https://cdnjs.cloudflare.com/ajax/libs/lato-font/3.0.0/css/lato-font.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/juliamono/0.050/juliamono.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/fontawesome.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/solid.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/brands.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.8/katex.min.css" rel="stylesheet" type="text/css"/><script>documenterBaseURL="../.."</script><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" data-main="../../assets/documenter.js"></script><script src="../../search_index.js"></script><script src="../../siteinfo.js"></script><script src="../../../versions.js"></script><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/catppuccin-mocha.css" data-theme-name="catppuccin-mocha"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/catppuccin-macchiato.css" data-theme-name="catppuccin-macchiato"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/catppuccin-frappe.css" data-theme-name="catppuccin-frappe"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/catppuccin-latte.css" data-theme-name="catppuccin-latte"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/documenter-dark.css" data-theme-name="documenter-dark" data-theme-primary-dark/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/documenter-light.css" data-theme-name="documenter-light" data-theme-primary/><script src="../../assets/themeswap.js"></script></head><body><div id="documenter"><nav class="docs-sidebar"><div class="docs-package-name"><span class="docs-autofit"><a href="../../">Nobelium.jl</a></span></div><button class="docs-search-query input is-rounded is-small is-clickable my-2 mx-auto py-1 px-2" id="documenter-search-query">Search docs (Ctrl + /)</button><ul class="docs-menu"><li><a class="tocitem" href="../../">Home</a></li><li><a class="tocitem" href="../../getting-started/">Getting Started</a></li><li><span class="tocitem">API Reference</span><ul><li><a class="tocitem" href="../../api/client/">Client</a></li><li><a class="tocitem" href="../../api/rest/">REST</a></li><li><a class="tocitem" href="../../api/gateway/">Gateway</a></li><li><a class="tocitem" href="../../api/types/">Types</a></li></ul></li><li><span class="tocitem">Examples</span><ul><li><a class="tocitem" href="../basic-bot/">Basic Bot</a></li><li><a class="tocitem" href="../slash-commands/">Slash Commands</a></li><li class="is-active"><a class="tocitem" href>Voice</a><ul class="internal"><li><a class="tocitem" href="#Basic-Voice-Connection"><span>Basic Voice Connection</span></a></li><li><a class="tocitem" href="#Voice-Connection-Lifecycle"><span>Voice Connection Lifecycle</span></a></li><li><a class="tocitem" href="#Sending-Audio"><span>Sending Audio</span></a></li><li><a class="tocitem" href="#Voice-State-Management"><span>Voice State Management</span></a></li><li><a class="tocitem" href="#Speaking-Indicator"><span>Speaking Indicator</span></a></li><li><a class="tocitem" href="#Audio-Constants"><span>Audio Constants</span></a></li><li><a class="tocitem" href="#Complete-Voice-Bot-Example"><span>Complete Voice Bot Example</span></a></li><li><a class="tocitem" href="#Encryption"><span>Encryption</span></a></li><li><a class="tocitem" href="#Tips"><span>Tips</span></a></li></ul></li></ul></li></ul><div class="docs-version-selector field has-addons"><div class="control"><span class="docs-label button is-static is-size-7">Version</span></div><div class="docs-selector control is-expanded"><div class="select is-fullwidth is-size-7"><select id="documenter-version-selector"></select></div></div></div></nav><div class="docs-main"><header class="docs-navbar"><a class="docs-sidebar-button docs-navbar-link fa-solid fa-bars is-hidden-desktop" id="documenter-sidebar-button" href="#"></a><nav class="breadcrumb"><ul class="is-hidden-mobile"><li><a class="is-disabled">Examples</a></li><li class="is-active"><a href>Voice</a></li></ul><ul class="is-hidden-tablet"><li class="is-active"><a href>Voice</a></li></ul></nav><div class="docs-right"><a class="docs-navbar-link" href="https://github.com/xaylis/Nobelium.jl/blob/main/docs/src/examples/voice.md#" title="Edit source on GitHub"><span class="docs-icon fa-solid"></span></a><a class="docs-settings-button docs-navbar-link fa-solid fa-gear" id="documenter-settings-button" href="#" title="Settings"></a><a class="docs-article-toggle-button fa-solid fa-chevron-up" id="documenter-article-toggle-button" href="javascript:;" title="Collapse all docstrings"></a></div></header><article class="content" id="documenter-page"><h1 id="Voice-Example"><a class="docs-heading-anchor" href="#Voice-Example">Voice Example</a><a id="Voice-Example-1"></a><a class="docs-heading-anchor-permalink" href="#Voice-Example" title="Permalink"></a></h1><p>This example demonstrates how to connect to voice channels and play audio.</p><div class="admonition is-info" id="Voice-Dependencies-1614c284a0a2a077"><header class="admonition-header">Voice Dependencies<a class="admonition-anchor" href="#Voice-Dependencies-1614c284a0a2a077" title="Permalink"></a></header><div class="admonition-body"><p>Voice support requires the optional <code>Sodium.jl</code> package for encryption:</p><pre><code class="language-julia hljs">using Pkg
+Pkg.add(&quot;Sodium&quot;)</code></pre></div></div><h2 id="Basic-Voice-Connection"><a class="docs-heading-anchor" href="#Basic-Voice-Connection">Basic Voice Connection</a><a id="Basic-Voice-Connection-1"></a><a class="docs-heading-anchor-permalink" href="#Basic-Voice-Connection" title="Permalink"></a></h2><pre><code class="language-julia hljs">using Nobelium
+
+bot = Bot(
+    token = ENV[&quot;DISCORD_TOKEN&quot;],
+    intents = Intents.DEFAULT | Intents.GUILD_VOICE_STATES
+)
+
+# Join a voice channel
+on!(bot, &quot;MESSAGE_CREATE&quot;) do data
+    if data[&quot;content&quot;] == &quot;!join&quot;
+        guild_id = Snowflake(data[&quot;guild_id&quot;])
+        
+        # Get the user&#39;s voice state to find their channel
+        # (You would typically get this from cache or API)
+        channel_id = Snowflake(123456789012345678)  # Voice channel ID
+        
+        voice_conn = join_channel!(bot, guild_id, channel_id)
+        reply(bot, data; content = &quot;Joined voice channel!&quot;)
+    end
+end
+
+# Leave voice channel
+on!(bot, &quot;MESSAGE_CREATE&quot;) do data
+    if data[&quot;content&quot;] == &quot;!leave&quot;
+        guild_id = Snowflake(data[&quot;guild_id&quot;])
+        leave_channel!(bot, guild_id)
+        reply(bot, data; content = &quot;Left voice channel!&quot;)
+    end
+end
+
+start!(bot)</code></pre><h2 id="Voice-Connection-Lifecycle"><a class="docs-heading-anchor" href="#Voice-Connection-Lifecycle">Voice Connection Lifecycle</a><a id="Voice-Connection-Lifecycle-1"></a><a class="docs-heading-anchor-permalink" href="#Voice-Connection-Lifecycle" title="Permalink"></a></h2><pre><code class="language-julia hljs"># The voice connection process:
+# 1. Send Voice State Update to Gateway
+# 2. Receive VOICE_STATE_UPDATE event
+# 3. Receive VOICE_SERVER_UPDATE event
+# 4. Connect to Voice WebSocket
+# 5. Perform UDP discovery
+# 6. Ready to send audio
+
+on!(bot, &quot;VOICE_STATE_UPDATE&quot;) do data
+    println(&quot;Voice state updated for user: &quot;, data[&quot;user_id&quot;])
+end
+
+on!(bot, &quot;VOICE_SERVER_UPDATE&quot;) do data
+    println(&quot;Voice server ready: &quot;, data[&quot;endpoint&quot;])
+end</code></pre><h2 id="Sending-Audio"><a class="docs-heading-anchor" href="#Sending-Audio">Sending Audio</a><a id="Sending-Audio-1"></a><a class="docs-heading-anchor-permalink" href="#Sending-Audio" title="Permalink"></a></h2><p>Audio must be in Opus format. Here&#39;s how to send pre-encoded Opus frames:</p><pre><code class="language-julia hljs"># Send a single Opus frame
+function play_opus_frame(voice_conn::VoiceConnection, opus_data::Vector{UInt8})
+    if is_ready(voice_conn)
+        send_opus_frame(voice_conn, opus_data)
+    end
+end
+
+# Play audio at the correct rate (20ms per frame)
+function play_audio(voice_conn::VoiceConnection, frames::Vector{Vector{UInt8}})
+    for frame in frames
+        if !is_connected(voice_conn)
+            break
+        end
+        
+        send_opus_frame(voice_conn, frame)
+        sleep(0.02)  # 20ms per frame
+    end
+end</code></pre><h2 id="Voice-State-Management"><a class="docs-heading-anchor" href="#Voice-State-Management">Voice State Management</a><a id="Voice-State-Management-1"></a><a class="docs-heading-anchor-permalink" href="#Voice-State-Management" title="Permalink"></a></h2><pre><code class="language-julia hljs">using Nobelium.Voice: VoiceStateManager, get_voice_state, is_in_voice
+
+# Check if bot is in a voice channel
+on!(bot, &quot;MESSAGE_CREATE&quot;) do data
+    if data[&quot;content&quot;] == &quot;!status&quot;
+        guild_id = Snowflake(data[&quot;guild_id&quot;])
+        
+        if is_in_voice(guild_id)
+            state = get_voice_state(guild_id)
+            reply(bot, data; content = &quot;In voice channel: $(state.channel_id)&quot;)
+        else
+            reply(bot, data; content = &quot;Not in a voice channel&quot;)
+        end
+    end
+end</code></pre><h2 id="Speaking-Indicator"><a class="docs-heading-anchor" href="#Speaking-Indicator">Speaking Indicator</a><a id="Speaking-Indicator-1"></a><a class="docs-heading-anchor-permalink" href="#Speaking-Indicator" title="Permalink"></a></h2><p>Control the speaking indicator:</p><pre><code class="language-julia hljs"># Start speaking (shows green ring around bot)
+send_speaking!(voice_conn, true)
+
+# Send audio frames...
+
+# Stop speaking
+send_speaking!(voice_conn, false)
+# Or use the convenience function:
+stop_speaking!(voice_conn)</code></pre><h2 id="Audio-Constants"><a class="docs-heading-anchor" href="#Audio-Constants">Audio Constants</a><a id="Audio-Constants-1"></a><a class="docs-heading-anchor-permalink" href="#Audio-Constants" title="Permalink"></a></h2><pre><code class="language-julia hljs">using Nobelium.Voice: OPUS_SAMPLE_RATE, OPUS_FRAME_SIZE, OPUS_CHANNELS
+
+# Opus audio parameters
+# Sample rate: 48000 Hz
+# Frame size: 960 samples (20ms at 48kHz)
+# Channels: 2 (stereo)</code></pre><h2 id="Complete-Voice-Bot-Example"><a class="docs-heading-anchor" href="#Complete-Voice-Bot-Example">Complete Voice Bot Example</a><a id="Complete-Voice-Bot-Example-1"></a><a class="docs-heading-anchor-permalink" href="#Complete-Voice-Bot-Example" title="Permalink"></a></h2><pre><code class="language-julia hljs">using Nobelium
+
+bot = Bot(
+    token = ENV[&quot;DISCORD_TOKEN&quot;],
+    intents = Intents.DEFAULT | Intents.GUILD_VOICE_STATES | Intents.MESSAGE_CONTENT
+)
+
+# Store voice connections per guild
+voice_connections = Dict{Snowflake, VoiceConnection}()
+
+on!(bot, &quot;MESSAGE_CREATE&quot;) do data
+    content = get(data, &quot;content&quot;, &quot;&quot;)
+    guild_id = haskey(data, &quot;guild_id&quot;) ? Snowflake(data[&quot;guild_id&quot;]) : nothing
+    
+    if guild_id === nothing
+        return  # Ignore DMs
+    end
+    
+    if startswith(content, &quot;!join &quot;)
+        # Parse channel ID from command
+        channel_id_str = content[7:end]
+        channel_id = Snowflake(parse(UInt64, channel_id_str))
+        
+        try
+            conn = join_channel!(bot, guild_id, channel_id)
+            voice_connections[guild_id] = conn
+            reply(bot, data; content = &quot;Joined voice channel!&quot;)
+        catch e
+            reply(bot, data; content = &quot;Failed to join: $(e)&quot;)
+        end
+        
+    elseif content == &quot;!leave&quot;
+        if haskey(voice_connections, guild_id)
+            leave_channel!(bot, guild_id)
+            delete!(voice_connections, guild_id)
+            reply(bot, data; content = &quot;Left voice channel!&quot;)
+        else
+            reply(bot, data; content = &quot;Not in a voice channel!&quot;)
+        end
+        
+    elseif content == &quot;!voice-status&quot;
+        if haskey(voice_connections, guild_id)
+            conn = voice_connections[guild_id]
+            status = is_ready(conn) ? &quot;Ready&quot; : &quot;Connecting...&quot;
+            reply(bot, data; content = &quot;Voice status: $status&quot;)
+        else
+            reply(bot, data; content = &quot;Not connected to voice&quot;)
+        end
+    end
+end
+
+start!(bot)</code></pre><h2 id="Encryption"><a class="docs-heading-anchor" href="#Encryption">Encryption</a><a id="Encryption-1"></a><a class="docs-heading-anchor-permalink" href="#Encryption" title="Permalink"></a></h2><p>Voice data is encrypted using XSalsa20-Poly1305:</p><pre><code class="language-julia hljs">using Nobelium.Voice: VoiceEncryption, encrypt_audio, decrypt_audio
+
+# Encryption is handled automatically by the VoiceConnection
+# The secret key is received during the voice handshake
+
+# Manual encryption (if needed):
+encryption = VoiceEncryption()
+setup_encryption!(encryption, secret_key)
+
+encrypted = encrypt_audio(encryption, audio_data, nonce)
+decrypted = decrypt_audio(encryption, encrypted, nonce)</code></pre><h2 id="Tips"><a class="docs-heading-anchor" href="#Tips">Tips</a><a id="Tips-1"></a><a class="docs-heading-anchor-permalink" href="#Tips" title="Permalink"></a></h2><ol><li><strong>Always check connection state</strong> before sending audio</li><li><strong>Use the correct frame timing</strong> (20ms per Opus frame)</li><li><strong>Handle disconnections gracefully</strong> - voice connections can drop</li><li><strong>Enable GUILD<em>VOICE</em>STATES intent</strong> to receive voice events</li><li><strong>Install Sodium.jl</strong> for voice encryption support</li></ol></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../slash-commands/">« Slash Commands</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.16.1 on <span class="colophon-date" title="Wednesday 24 December 2025 01:09">Wednesday 24 December 2025</span>. Using Julia version 1.12.3.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>

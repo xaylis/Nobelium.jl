@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><title>Basic Bot · Nobelium.jl</title><meta name="title" content="Basic Bot · Nobelium.jl"/><meta property="og:title" content="Basic Bot · Nobelium.jl"/><meta property="twitter:title" content="Basic Bot · Nobelium.jl"/><meta name="description" content="Documentation for Nobelium.jl."/><meta property="og:description" content="Documentation for Nobelium.jl."/><meta property="twitter:description" content="Documentation for Nobelium.jl."/><meta property="og:url" content="https://xaylis.github.io/Nobelium.jl/examples/basic-bot/"/><meta property="twitter:url" content="https://xaylis.github.io/Nobelium.jl/examples/basic-bot/"/><link rel="canonical" href="https://xaylis.github.io/Nobelium.jl/examples/basic-bot/"/><script data-outdated-warner src="../../assets/warner.js"></script><link href="https://cdnjs.cloudflare.com/ajax/libs/lato-font/3.0.0/css/lato-font.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/juliamono/0.050/juliamono.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/fontawesome.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/solid.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/brands.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.8/katex.min.css" rel="stylesheet" type="text/css"/><script>documenterBaseURL="../.."</script><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" data-main="../../assets/documenter.js"></script><script src="../../search_index.js"></script><script src="../../siteinfo.js"></script><script src="../../../versions.js"></script><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/catppuccin-mocha.css" data-theme-name="catppuccin-mocha"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/catppuccin-macchiato.css" data-theme-name="catppuccin-macchiato"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/catppuccin-frappe.css" data-theme-name="catppuccin-frappe"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/catppuccin-latte.css" data-theme-name="catppuccin-latte"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/documenter-dark.css" data-theme-name="documenter-dark" data-theme-primary-dark/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/documenter-light.css" data-theme-name="documenter-light" data-theme-primary/><script src="../../assets/themeswap.js"></script></head><body><div id="documenter"><nav class="docs-sidebar"><div class="docs-package-name"><span class="docs-autofit"><a href="../../">Nobelium.jl</a></span></div><button class="docs-search-query input is-rounded is-small is-clickable my-2 mx-auto py-1 px-2" id="documenter-search-query">Search docs (Ctrl + /)</button><ul class="docs-menu"><li><a class="tocitem" href="../../">Home</a></li><li><a class="tocitem" href="../../getting-started/">Getting Started</a></li><li><span class="tocitem">API Reference</span><ul><li><a class="tocitem" href="../../api/client/">Client</a></li><li><a class="tocitem" href="../../api/rest/">REST</a></li><li><a class="tocitem" href="../../api/gateway/">Gateway</a></li><li><a class="tocitem" href="../../api/types/">Types</a></li></ul></li><li><span class="tocitem">Examples</span><ul><li class="is-active"><a class="tocitem" href>Basic Bot</a><ul class="internal"><li><a class="tocitem" href="#Complete-Example"><span>Complete Example</span></a></li><li><a class="tocitem" href="#Running-the-Bot"><span>Running the Bot</span></a></li><li><a class="tocitem" href="#Adding-More-Commands"><span>Adding More Commands</span></a></li><li><a class="tocitem" href="#Error-Handling"><span>Error Handling</span></a></li><li><a class="tocitem" href="#Async-Operations"><span>Async Operations</span></a></li></ul></li><li><a class="tocitem" href="../slash-commands/">Slash Commands</a></li><li><a class="tocitem" href="../voice/">Voice</a></li></ul></li></ul><div class="docs-version-selector field has-addons"><div class="control"><span class="docs-label button is-static is-size-7">Version</span></div><div class="docs-selector control is-expanded"><div class="select is-fullwidth is-size-7"><select id="documenter-version-selector"></select></div></div></div></nav><div class="docs-main"><header class="docs-navbar"><a class="docs-sidebar-button docs-navbar-link fa-solid fa-bars is-hidden-desktop" id="documenter-sidebar-button" href="#"></a><nav class="breadcrumb"><ul class="is-hidden-mobile"><li><a class="is-disabled">Examples</a></li><li class="is-active"><a href>Basic Bot</a></li></ul><ul class="is-hidden-tablet"><li class="is-active"><a href>Basic Bot</a></li></ul></nav><div class="docs-right"><a class="docs-navbar-link" href="https://github.com/xaylis/Nobelium.jl/blob/main/docs/src/examples/basic-bot.md#" title="Edit source on GitHub"><span class="docs-icon fa-solid"></span></a><a class="docs-settings-button docs-navbar-link fa-solid fa-gear" id="documenter-settings-button" href="#" title="Settings"></a><a class="docs-article-toggle-button fa-solid fa-chevron-up" id="documenter-article-toggle-button" href="javascript:;" title="Collapse all docstrings"></a></div></header><article class="content" id="documenter-page"><h1 id="Basic-Bot-Example"><a class="docs-heading-anchor" href="#Basic-Bot-Example">Basic Bot Example</a><a id="Basic-Bot-Example-1"></a><a class="docs-heading-anchor-permalink" href="#Basic-Bot-Example" title="Permalink"></a></h1><p>This example demonstrates a simple Discord bot with common features.</p><h2 id="Complete-Example"><a class="docs-heading-anchor" href="#Complete-Example">Complete Example</a><a id="Complete-Example-1"></a><a class="docs-heading-anchor-permalink" href="#Complete-Example" title="Permalink"></a></h2><pre><code class="language-julia hljs">using Nobelium
+
+# Create the bot
+bot = Bot(
+    token = ENV[&quot;DISCORD_TOKEN&quot;],
+    intents = Intents.DEFAULT | Intents.MESSAGE_CONTENT
+)
+
+# Track bot startup
+on!(bot, &quot;READY&quot;) do data
+    user = data[&quot;user&quot;]
+    println(&quot;✓ Logged in as $(user[&quot;username&quot;])#$(user[&quot;discriminator&quot;])&quot;)
+    println(&quot;✓ Bot ID: $(user[&quot;id&quot;])&quot;)
+end
+
+# Simple ping command
+on!(bot, &quot;MESSAGE_CREATE&quot;) do data
+    content = get(data, &quot;content&quot;, &quot;&quot;)
+    
+    if content == &quot;!ping&quot;
+        reply(bot, data; content = &quot;Pong! 🏓&quot;)
+    end
+end
+
+# Echo command
+on!(bot, &quot;MESSAGE_CREATE&quot;) do data
+    content = get(data, &quot;content&quot;, &quot;&quot;)
+    
+    if startswith(content, &quot;!echo &quot;)
+        text = content[7:end]
+        reply(bot, data; content = text)
+    end
+end
+
+# User info command
+on!(bot, &quot;MESSAGE_CREATE&quot;) do data
+    content = get(data, &quot;content&quot;, &quot;&quot;)
+    
+    if content == &quot;!whoami&quot;
+        author = data[&quot;author&quot;]
+        embed = Dict(
+            &quot;title&quot; =&gt; &quot;User Info&quot;,
+            &quot;fields&quot; =&gt; [
+                Dict(&quot;name&quot; =&gt; &quot;Username&quot;, &quot;value&quot; =&gt; author[&quot;username&quot;], &quot;inline&quot; =&gt; true),
+                Dict(&quot;name&quot; =&gt; &quot;ID&quot;, &quot;value&quot; =&gt; author[&quot;id&quot;], &quot;inline&quot; =&gt; true),
+            ],
+            &quot;color&quot; =&gt; 0x5865F2
+        )
+        reply(bot, data; embeds = [embed])
+    end
+end
+
+# Start the bot
+println(&quot;Starting bot...&quot;)
+start!(bot)</code></pre><h2 id="Running-the-Bot"><a class="docs-heading-anchor" href="#Running-the-Bot">Running the Bot</a><a id="Running-the-Bot-1"></a><a class="docs-heading-anchor-permalink" href="#Running-the-Bot" title="Permalink"></a></h2><pre><code class="language-bash hljs">export DISCORD_TOKEN=&quot;your-token-here&quot;
+julia basic_bot.jl</code></pre><h2 id="Adding-More-Commands"><a class="docs-heading-anchor" href="#Adding-More-Commands">Adding More Commands</a><a id="Adding-More-Commands-1"></a><a class="docs-heading-anchor-permalink" href="#Adding-More-Commands" title="Permalink"></a></h2><h3 id="Help-Command"><a class="docs-heading-anchor" href="#Help-Command">Help Command</a><a id="Help-Command-1"></a><a class="docs-heading-anchor-permalink" href="#Help-Command" title="Permalink"></a></h3><pre><code class="language-julia hljs">const COMMANDS = Dict(
+    &quot;!ping&quot; =&gt; &quot;Check if the bot is alive&quot;,
+    &quot;!echo &lt;text&gt;&quot; =&gt; &quot;Echo back your message&quot;,
+    &quot;!whoami&quot; =&gt; &quot;Display your user info&quot;,
+    &quot;!help&quot; =&gt; &quot;Show this help message&quot;
+)
+
+on!(bot, &quot;MESSAGE_CREATE&quot;) do data
+    if data[&quot;content&quot;] == &quot;!help&quot;
+        help_text = join([&quot;**$cmd** - $desc&quot; for (cmd, desc) in COMMANDS], &quot;\n&quot;)
+        reply(bot, data; content = help_text)
+    end
+end</code></pre><h3 id="Reaction-Handling"><a class="docs-heading-anchor" href="#Reaction-Handling">Reaction Handling</a><a id="Reaction-Handling-1"></a><a class="docs-heading-anchor-permalink" href="#Reaction-Handling" title="Permalink"></a></h3><pre><code class="language-julia hljs">on!(bot, &quot;MESSAGE_REACTION_ADD&quot;) do data
+    emoji = data[&quot;emoji&quot;][&quot;name&quot;]
+    user_id = data[&quot;user_id&quot;]
+    
+    # Don&#39;t respond to bot&#39;s own reactions
+    if user_id == string(bot.user.id)
+        return
+    end
+    
+    if emoji == &quot;👍&quot;
+        channel_id = data[&quot;channel_id&quot;]
+        send_message(bot, channel_id; content = &quot;Thanks for the thumbs up!&quot;)
+    end
+end</code></pre><h3 id="Message-Formatting"><a class="docs-heading-anchor" href="#Message-Formatting">Message Formatting</a><a id="Message-Formatting-1"></a><a class="docs-heading-anchor-permalink" href="#Message-Formatting" title="Permalink"></a></h3><pre><code class="language-julia hljs">using Nobelium: bold, italic, code, code_block, mention_user
+
+on!(bot, &quot;MESSAGE_CREATE&quot;) do data
+    if data[&quot;content&quot;] == &quot;!format&quot;
+        msg = &quot;&quot;&quot;
+        $(bold(&quot;Bold text&quot;))
+        $(italic(&quot;Italic text&quot;))
+        $(code(&quot;inline code&quot;))
+        $(code_block(&quot;println(\&quot;Hello!\&quot;)&quot;, language=&quot;julia&quot;))
+        &quot;&quot;&quot;
+        reply(bot, data; content = msg)
+    end
+end</code></pre><h2 id="Error-Handling"><a class="docs-heading-anchor" href="#Error-Handling">Error Handling</a><a id="Error-Handling-1"></a><a class="docs-heading-anchor-permalink" href="#Error-Handling" title="Permalink"></a></h2><pre><code class="language-julia hljs">on!(bot, &quot;MESSAGE_CREATE&quot;) do data
+    if startswith(data[&quot;content&quot;], &quot;!delete &quot;)
+        try
+            msg_id = data[&quot;content&quot;][9:end]
+            delete_message(bot, data[&quot;channel_id&quot;], msg_id)
+            reply(bot, data; content = &quot;Message deleted!&quot;)
+        catch e::APIError
+            if e.status_code == 403
+                reply(bot, data; content = &quot;I don&#39;t have permission to delete that message.&quot;)
+            elseif e.status_code == 404
+                reply(bot, data; content = &quot;Message not found.&quot;)
+            else
+                reply(bot, data; content = &quot;Error: $(e.message)&quot;)
+            end
+        end
+    end
+end</code></pre><h2 id="Async-Operations"><a class="docs-heading-anchor" href="#Async-Operations">Async Operations</a><a id="Async-Operations-1"></a><a class="docs-heading-anchor-permalink" href="#Async-Operations" title="Permalink"></a></h2><p>For long-running operations, use async tasks:</p><pre><code class="language-julia hljs">on!(bot, &quot;MESSAGE_CREATE&quot;) do data
+    if data[&quot;content&quot;] == &quot;!slow&quot;
+        reply(bot, data; content = &quot;Processing...&quot;)
+        
+        @async begin
+            sleep(5)  # Simulate long operation
+            send_message(bot, data[&quot;channel_id&quot;]; content = &quot;Done!&quot;)
+        end
+    end
+end</code></pre></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../../api/types/">« Types</a><a class="docs-footer-nextpage" href="../slash-commands/">Slash Commands »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.16.1 on <span class="colophon-date" title="Wednesday 24 December 2025 01:09">Wednesday 24 December 2025</span>. Using Julia version 1.12.3.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
