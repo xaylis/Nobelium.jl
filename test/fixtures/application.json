@@ -1,0 +1,54 @@
+{
+  "id": "172150183260323840",
+  "name": "Baba O-Riley",
+  "icon": null,
+  "description": "Test",
+  "rpc_origins": ["https://baba.example.com"],
+  "bot_public": true,
+  "bot_require_code_grant": false,
+  "owner": {
+    "id": "172150183260323840",
+    "username": "i own a bot",
+    "discriminator": "1738",
+    "global_name": null,
+    "avatar": null,
+    "flags": 1024
+  },
+  "verify_key": "1e0a356058d627ca38a5c8c9648818061d49e49bd9da9e3ab17d98ad4d6bg2u8",
+  "team": {
+    "icon": "dd9b7dcfdf5351b9c3de0fe167bacbe1",
+    "id": "531992624043786253",
+    "members": [
+      {
+        "membership_state": 2,
+        "team_id": "531992624043786253",
+        "user": {
+          "id": "511972282709709995",
+          "username": "Mr Owner",
+          "discriminator": "0001",
+          "global_name": "Mr Owner",
+          "avatar": "d9e261cd35999608eb7e3de1fae3688b"
+        },
+        "role": "admin"
+      }
+    ],
+    "name": "Avatar's team",
+    "owner_user_id": "511972282709709995"
+  },
+  "guild_id": "290926798626357260",
+  "primary_sku_id": "172150183260323840",
+  "slug": "test",
+  "cover_image": "31deabb7e45b6c8ecfef77d2f99c81a5",
+  "flags": 65536,
+  "approximate_guild_count": 42,
+  "redirect_uris": ["https://baba.example.com/callback"],
+  "interactions_endpoint_url": null,
+  "event_webhooks_status": 1,
+  "tags": ["music", "riley"],
+  "install_params": {"scopes": ["bot"], "permissions": "8"},
+  "integration_types_config": {
+    "0": {"oauth2_install_params": {"scopes": ["applications.commands", "bot"], "permissions": "2048"}},
+    "1": {}
+  },
+  "custom_install_url": "https://baba.example.com/install"
+}

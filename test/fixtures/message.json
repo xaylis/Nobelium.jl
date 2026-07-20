@@ -1,0 +1,114 @@
+{
+    "id": "334385199974967042",
+    "channel_id": "290926798999357250",
+    "author": {
+        "id": "53908099506183680",
+        "username": "Mason",
+        "discriminator": "9999",
+        "avatar": "a_bab14f271d565501444b2ca3be944b25"
+    },
+    "content": "Big news! In this <#278325129692446722> channel!",
+    "timestamp": "2017-07-11T17:27:07.299000+00:00",
+    "edited_timestamp": null,
+    "tts": false,
+    "mention_everyone": false,
+    "mentions": [],
+    "mention_roles": ["41771983423143937"],
+    "mention_channels": [
+        {
+            "id": "278325129692446722",
+            "guild_id": "278325129692446720",
+            "name": "big-news",
+            "type": 5
+        }
+    ],
+    "attachments": [
+        {
+            "id": "334385199974967043",
+            "filename": "cat.png",
+            "description": "A cat",
+            "content_type": "image/png",
+            "size": 21390,
+            "url": "https://cdn.discordapp.com/attachments/290926798999357250/334385199974967043/cat.png",
+            "proxy_url": "https://media.discordapp.net/attachments/290926798999357250/334385199974967043/cat.png",
+            "height": 200,
+            "width": 200,
+            "flags": 8
+        }
+    ],
+    "embeds": [
+        {
+            "title": "Hello, Embed!",
+            "description": "This is an embedded message.",
+            "color": 15258703
+        }
+    ],
+    "reactions": [
+        {
+            "count": 1,
+            "count_details": {"burst": 0, "normal": 1},
+            "me": false,
+            "me_burst": false,
+            "emoji": {"id": null, "name": "🔥"},
+            "burst_colors": []
+        }
+    ],
+    "pinned": false,
+    "type": 19,
+    "flags": 0,
+    "message_reference": {
+        "type": 0,
+        "channel_id": "290926798999357250",
+        "guild_id": "278325129692446720",
+        "message_id": "306588351130107906"
+    },
+    "referenced_message": {
+        "id": "306588351130107906",
+        "channel_id": "290926798999357250",
+        "author": {
+            "id": "53908099506183680",
+            "username": "Mason",
+            "discriminator": "9999",
+            "avatar": null
+        },
+        "content": "Supa Hot",
+        "timestamp": "2017-07-10T17:27:07.299000+00:00",
+        "edited_timestamp": null,
+        "tts": false,
+        "mention_everyone": false,
+        "mentions": [],
+        "mention_roles": [],
+        "attachments": [],
+        "embeds": [],
+        "pinned": false,
+        "type": 0
+    },
+    "interaction_metadata": {
+        "id": "935943245803966475",
+        "type": 2,
+        "user": {
+            "id": "53908099506183680",
+            "username": "Mason",
+            "discriminator": "9999",
+            "avatar": null
+        },
+        "authorizing_integration_owners": {"0": "278325129692446720"}
+    },
+    "sticker_items": [
+        {
+            "id": "749054660769218631",
+            "name": "Wave",
+            "format_type": 1
+        }
+    ],
+    "role_subscription_data": {
+        "role_subscription_listing_id": "41771983423143937",
+        "tier_name": "Sparkling Supporter",
+        "total_months_subscribed": 3,
+        "is_renewal": false
+    },
+    "call": {
+        "participants": ["53908099506183680"],
+        "ended_timestamp": "2021-04-12T23:40:39.855793+00:00"
+    }
+}

@@ -1,0 +1,35 @@
+{
+  "type": 0,
+  "code": "0vCdhLbwjZZTWZLD",
+  "channel": {
+    "id": "165176875973476352",
+    "name": "illuminati",
+    "type": 0
+  },
+  "inviter": {
+    "id": "115590097100865541",
+    "username": "speed",
+    "discriminator": "7653",
+    "global_name": null,
+    "avatar": "deadbeef",
+    "public_flags": 131328
+  },
+  "target_type": 1,
+  "target_user": {
+    "id": "165176875973476352",
+    "username": "bob",
+    "discriminator": "1234",
+    "global_name": null,
+    "avatar": "deadbeef",
+    "public_flags": 64
+  },
+  "approximate_presence_count": 42,
+  "approximate_member_count": 100,
+  "expires_at": null,
+  "flags": 1,
+  "uses": 3,
+  "max_uses": 10,
+  "max_age": 86400,
+  "temporary": false,
+  "created_at": "2016-03-31T19:15:39.954000+00:00"
+}

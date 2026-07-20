@@ -1,0 +1,36 @@
+{
+    "application_commands": [],
+    "audit_log_entries": [
+        {
+            "target_id": "84043391694213120",
+            "changes": [
+                {"key": "name", "old_value": "general", "new_value": "lounge"}
+            ],
+            "user_id": "53908232506183680",
+            "id": "1096400889134125056",
+            "action_type": 11,
+            "reason": "renaming for clarity"
+        },
+        {
+            "target_id": null,
+            "user_id": "53908232506183680",
+            "id": "1096400889134125057",
+            "action_type": 21,
+            "options": {"delete_member_days": "7", "members_removed": "3"}
+        }
+    ],
+    "auto_moderation_rules": [],
+    "guild_scheduled_events": [],
+    "integrations": [],
+    "threads": [],
+    "users": [
+        {
+            "id": "53908232506183680",
+            "username": "mason",
+            "discriminator": "0",
+            "global_name": "Mason",
+            "avatar": null
+        }
+    ],
+    "webhooks": []
+}

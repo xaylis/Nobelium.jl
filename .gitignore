@@ -1,0 +1,26 @@
+# Julia
+*.jl.cov
+*.jl.*.cov
+*.jl.mem
+Manifest.toml
+
+# Docs build artifacts
+docs/build/
+docs/node_modules/
+docs/package.json
+docs/package-lock.json
+
+# Editors / OS
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# Local-only
+.claude/
+.env
+.env.local
+temp/

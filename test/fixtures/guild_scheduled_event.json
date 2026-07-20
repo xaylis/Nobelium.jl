@@ -1,0 +1,44 @@
+{
+  "id": "1059954443799498922",
+  "guild_id": "197038439483310086",
+  "channel_id": null,
+  "creator_id": "80351110224678912",
+  "name": "Community Yoga",
+  "description": "Downward dog with the mod team",
+  "scheduled_start_time": "2026-08-07T18:00:00+00:00",
+  "scheduled_end_time": "2026-08-07T19:00:00+00:00",
+  "privacy_level": 2,
+  "status": 1,
+  "entity_type": 3,
+  "entity_id": null,
+  "entity_metadata": {
+    "location": "Griffith Park"
+  },
+  "creator": {
+    "id": "80351110224678912",
+    "username": "nelly",
+    "discriminator": "0",
+    "global_name": "Nelly",
+    "avatar": "8342729096ea3675442027381ff50dfe",
+    "public_flags": 64
+  },
+  "user_count": 23,
+  "image": null,
+  "recurrence_rule": {
+    "start": "2026-08-07T18:00:00+00:00",
+    "end": null,
+    "frequency": 1,
+    "interval": 1,
+    "by_weekday": null,
+    "by_n_weekday": [
+      {
+        "n": 1,
+        "day": 4
+      }
+    ],
+    "by_month": null,
+    "by_month_day": null,
+    "by_year_day": null,
+    "count": null
+  }
+}

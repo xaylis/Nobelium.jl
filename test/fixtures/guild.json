@@ -1,0 +1,93 @@
+{
+  "id": "197038439483310086",
+  "name": "Discord Testers",
+  "icon": "f64c482b807da4f539cff778d174971c",
+  "icon_hash": null,
+  "splash": null,
+  "discovery_splash": null,
+  "owner_id": "73193882359173120",
+  "region": "us-west",
+  "afk_channel_id": null,
+  "afk_timeout": 300,
+  "widget_enabled": true,
+  "widget_channel_id": null,
+  "verification_level": 3,
+  "default_message_notifications": 1,
+  "explicit_content_filter": 2,
+  "roles": [
+    {
+      "id": "41771983423143936",
+      "name": "WE DEM BOYZZ!!!!!!",
+      "color": 3447003,
+      "colors": {
+        "primary_color": 3447003,
+        "secondary_color": null,
+        "tertiary_color": null
+      },
+      "hoist": true,
+      "icon": null,
+      "unicode_emoji": null,
+      "position": 1,
+      "permissions": "66321471",
+      "managed": false,
+      "mentionable": false,
+      "flags": 0
+    }
+  ],
+  "emojis": [
+    {
+      "id": "41771983429993937",
+      "name": "LUL",
+      "roles": ["41771983429993000"],
+      "require_colons": true,
+      "managed": false,
+      "animated": false,
+      "available": true
+    }
+  ],
+  "features": ["ANIMATED_ICON", "COMMUNITY", "INVITE_SPLASH", "VANITY_URL"],
+  "mfa_level": 1,
+  "application_id": null,
+  "system_channel_id": null,
+  "system_channel_flags": 3,
+  "rules_channel_id": "441688182833020939",
+  "max_presences": null,
+  "max_members": 250000,
+  "vanity_url_code": "discord-testers",
+  "description": "The official place to report Discord Bugs!",
+  "banner": "9b6439a7de04f1d26af92f84ac9e1e4a",
+  "premium_tier": 3,
+  "premium_subscription_count": 33,
+  "preferred_locale": "en-US",
+  "public_updates_channel_id": "281283303326089216",
+  "max_video_channel_users": 25,
+  "max_stage_video_channel_users": 50,
+  "approximate_member_count": 951,
+  "approximate_presence_count": 381,
+  "welcome_screen": {
+    "description": "Discord Developers is a place to learn about Discord's API.",
+    "welcome_channels": [
+      {
+        "channel_id": "697138785317814292",
+        "description": "Follow for official Discord API updates",
+        "emoji_id": null,
+        "emoji_name": "📡"
+      },
+      {
+        "channel_id": "697236247739105340",
+        "description": "Get help with Bot Verifications",
+        "emoji_id": "596548880329588786",
+        "emoji_name": "reactionops"
+      }
+    ]
+  },
+  "nsfw_level": 0,
+  "stickers": [],
+  "premium_progress_bar_enabled": true,
+  "safety_alerts_channel_id": null,
+  "incidents_data": {
+    "invites_disabled_until": "2024-05-24T21:00:00+00:00",
+    "dms_disabled_until": null,
+    "dm_spam_detected_at": null
+  }
+}
