@@ -193,6 +193,8 @@ function run_shard!(shard::Shard)
             shard.running = false
             notify(shard.ready)   # unblock anyone waiting on startup
             @error "shard $(shard.id): fatal gateway close" exception = shard.fatal
+            # a fatal close (bad token, bad intents) dooms every shard equally
+            stop!(shard.client)
             break
         end
         if code in RESET_SESSION_CODES

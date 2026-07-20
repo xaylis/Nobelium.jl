@@ -24,10 +24,11 @@ function Base.get(s::Store{K,V}, key, default) where {K,V}
 end
 
 function Base.setindex!(s::Store{K,V}, value, key) where {K,V}
+    s.capacity <= 0 && return value
     lock(s.lock) do
         s.data[key] = (value, s.stamp += 1)
         if length(s.data) > s.capacity
-            drop = length(s.data) - s.capacity + max(1, s.capacity ÷ 10)
+            drop = min(length(s.data) - s.capacity + max(1, s.capacity ÷ 10), length(s.data))
             for (k, _) in sort!(collect(pairs(s.data)); by = p -> p.second[2])[1:drop]
                 delete!(s.data, k)
             end

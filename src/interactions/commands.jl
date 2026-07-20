@@ -6,7 +6,7 @@ export slash_command, user_command, message_command, command_option, choice,
     subcommand, subcommand_group
 
 """
-    slash_command(name, description; options=[], kwargs...) -> NamedTuple
+    slash_command(name, description; options, kwargs...) -> NamedTuple
 
 Build a CHAT_INPUT command payload.
 
@@ -64,7 +64,7 @@ end
 choice(name::AbstractString, value) = (; name, value)
 
 """
-    subcommand(name, description; options=[]) -> NamedTuple
+    subcommand(name, description; options) -> NamedTuple
 """
 function subcommand(name::AbstractString, description::AbstractString; options=missing)
     sub = (; type=1, name, description)

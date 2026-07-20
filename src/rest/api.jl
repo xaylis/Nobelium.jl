@@ -62,8 +62,11 @@ function _payload(body::Union{NamedTuple,AbstractDict,Base.Pairs})
     isempty(kept) ? nothing : NamedTuple{Tuple(first.(kept))}(Tuple(last.(kept)))
 end
 
+_query_value(v) = string(v)
+_query_value(v::AbstractVector) = join(v, ',')
+
 function _query_string(query)
-    parts = ["$(k)=$(escapeuri(string(v)))" for (k, v) in pairs(query)
+    parts = ["$(k)=$(escapeuri(_query_value(v)))" for (k, v) in pairs(query)
              if v !== missing && v !== nothing]
     isempty(parts) ? "" : '?' * join(parts, '&')
 end
@@ -128,10 +131,15 @@ function request(api::API, route::Route, params...;
         reqbody = UInt8[]
     end
 
+    # A multipart Form is a one-shot stream; keep a pristine copy so retries
+    # don't send empty bodies.
+    template = reqbody isa HTTP.Form ? deepcopy(reqbody) : nothing
+
     failures = 0
     limited = 0
     while true
         acquire!(api.limiter, key)
+        template === nothing || (reqbody = deepcopy(template))
         resp = try
             api.http(String(route.method), url, headers, reqbody)
         catch e

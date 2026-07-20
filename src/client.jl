@@ -143,8 +143,10 @@ function stop!(client::Client)
 end
 
 # Which shard a guild's events arrive on.
-_shard_for(c::Client, guild) =
+function _shard_for(c::Client, guild)
+    isempty(c.shards) && throw(ArgumentError("client has no running shards — call start! first"))
     c.shards[Int(snowflake(guild).value >> 22 % length(c.shards)) + 1]
+end
 
 """
     activity(name; type=0, state=nothing, url=nothing) -> NamedTuple
