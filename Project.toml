@@ -1,7 +1,7 @@
 name = "Nobelium"
 uuid = "c0be6d65-1a90-4794-95a4-5e06952dcdf2"
-authors = ["Nobelium contributors"]
 version = "0.2.0"
+authors = ["Nobelium contributors"]
 
 [deps]
 Dates = "ade2ca70-3891-5945-98fb-dc099432e06a"
@@ -20,7 +20,7 @@ libsodium_jll = "a9144af2-ca23-56d9-984f-0d03f7b5ccf8"
 NobeliumSodiumExt = "libsodium_jll"
 
 [compat]
-HTTP = "1"
+HTTP = "1, 2"
 JSON3 = "1"
 StructTypes = "1"
 URIs = "1"
