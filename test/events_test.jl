@@ -185,6 +185,12 @@ using Nobelium: EVENT_TYPES
         @test act.assets.large_image == "img"
         @test ev.client_status.desktop == "online"
         @test ev.client_status.mobile === missing
+
+        # Discord guarantees no presence fields beyond user.id.
+        bare = StructTypes.construct(PresenceUpdate, JSON3.read("""{"user": {"id": "1"}}"""))
+        @test bare.status === missing
+        @test bare.activities === missing
+        @test bare.client_status === missing
     end
 
     @testset "GuildMembersChunk" begin

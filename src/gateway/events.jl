@@ -446,15 +446,16 @@ end
 """
     PresenceUpdate
 
-A user's current state on a guild. `user` is a partial user object — only
-`id` is guaranteed present — so it is left untyped.
+A user's current state on a guild. Discord guarantees none of this event's
+fields: `user` is a partial user object — only `id` is reliably present — so
+it is left untyped, and the rest may be absent.
 """
 @discord_object struct PresenceUpdate <: AbstractEvent
     user::Any
-    guild_id::Snowflake
-    status::String
-    activities::Vector{Activity}
-    client_status::ClientStatus
+    guild_id::Optional{Snowflake}
+    status::Optional{String}
+    activities::Optional{Vector{Activity}}
+    client_status::Optional{ClientStatus}
 end
 
 # --- Stage instances -----------------------------------------------------
