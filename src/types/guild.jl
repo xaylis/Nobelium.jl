@@ -206,12 +206,13 @@ end
     Integration
 
 A guild integration (`twitch`, `youtube`, `discord`, or `guild_subscription`).
+The partial integrations referenced by an audit log omit `enabled`.
 """
 @discord_object struct Integration
     id::Snowflake
     name::String
     type::String
-    enabled::Bool
+    enabled::Optional{Bool}
     syncing::Optional{Bool}
     role_id::Optional{Snowflake}
     enable_emoticons::Optional{Bool}

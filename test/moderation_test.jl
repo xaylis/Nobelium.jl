@@ -87,6 +87,12 @@ end
         @test isempty(log.application_commands)
         @test only(log.users).username == "mason"
 
+        # Audit logs reference partial integrations: no enabled, among others.
+        integration = only(log.integrations)
+        @test integration.type == "twitch"
+        @test integration.enabled === missing
+        @test integration.account.name == "twitchusername"
+
         renamed, pruned = log.audit_log_entries
         @test renamed.action_type == AuditLogEvents.CHANNEL_UPDATE
         @test renamed.target_id == "84043391694213120"

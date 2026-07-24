@@ -21,7 +21,15 @@
     ],
     "auto_moderation_rules": [],
     "guild_scheduled_events": [],
-    "integrations": [],
+    "integrations": [
+        {
+            "id": "33590653072239123",
+            "name": "A Name",
+            "type": "twitch",
+            "account": {"name": "twitchusername", "id": "1234567"},
+            "application_id": "94651234501213162"
+        }
+    ],
     "threads": [],
     "users": [
         {
