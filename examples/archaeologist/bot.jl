@@ -26,24 +26,7 @@ const COMMANDS = [
         ]),
 ]
 
-# Julia compiles code on first use, which can cost seconds — more than
-# Discord's 3-second interaction window. Run every acknowledgement path once
-# against a stub transport so the first real command answers instantly.
-function warmup()
-    stub = API("warmup"; http=(m, u, h, b) -> Nobelium.HTTP.Response(204, Pair{String,String}[]; body=UInt8[]))
-    fake = Interaction(id=1, application_id=1, type=InteractionTypes.APPLICATION_COMMAND,
-                       token="warmup", version=1, app_permissions=Permissions(0),
-                       entitlements=[], authorizing_integration_owners=Dict{String,Snowflake}(),
-                       attachment_size_limit=8388608)
-    respond(stub, fake; content="w")
-    respond(stub, fake; content="w", ephemeral=true)
-    defer(stub, fake)
-    defer(stub, fake; ephemeral=true)
-    defer_update(stub, fake)
-end
-
 on!(client, Ready) do c, ev
-    warmup()
     bulk_overwrite_guild_application_commands(c.api, ev.application.id, GUILD, COMMANDS)
     @info "ready as $(display_name(ev.user)) — commands registered"
 end
