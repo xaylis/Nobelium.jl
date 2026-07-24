@@ -53,5 +53,5 @@ Nobelium requires Julia 1.10 or later.
 
 ```julia
 using Pkg
-Pkg.add(url="https://github.com/xaylis/Nobelium.jl")
+Pkg.add("Nobelium")
 ```

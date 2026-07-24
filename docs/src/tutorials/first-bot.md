@@ -7,7 +7,7 @@ Project setup:
 
 ```julia
 mkdir("dicebot"); cd("dicebot")
-using Pkg; Pkg.activate("."); Pkg.add(url="https://github.com/xaylis/Nobelium.jl")
+using Pkg; Pkg.activate("."); Pkg.add("Nobelium")
 ```
 
 Create `bot.jl`:

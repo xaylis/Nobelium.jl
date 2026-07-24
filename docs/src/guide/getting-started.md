@@ -11,7 +11,7 @@
 
 ```julia
 using Pkg
-Pkg.add(url="https://github.com/xaylis/Nobelium.jl")
+Pkg.add("Nobelium")
 ```
 
 ## Hello, gateway
