@@ -98,6 +98,8 @@ include("voice/crypto.jl")
 include("voice/audio.jl")
 include("voice/voice.jl")
 
+include("precompile.jl")
+
 export API, DiscordFile
 export Snowflake, snowflake, timestamp
 export Optional, Nullable, OptionalNullable, DiscordObject
