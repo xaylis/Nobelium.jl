@@ -8,11 +8,11 @@ A Discord API wrapper for Julia.
 
 ## Installation
 
-Requires Julia 1.10+. Not yet in the General registry:
+Requires Julia 1.10+. Nobelium is registered in the General registry:
 
 ```julia
 using Pkg
-Pkg.add(url="https://github.com/xaylis/Nobelium.jl")
+Pkg.add("Nobelium")
 ```
 
 ## Making a bot
