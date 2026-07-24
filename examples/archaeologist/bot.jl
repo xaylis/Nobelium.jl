@@ -111,12 +111,8 @@ end
 # ------------------------------------------------------------ /timecapsule --
 
 function seal!(c, i)
-    text = ""
-    minutes = 5
-    for opt in something(i.data.options, ())
-        opt.name == "message" && (text = String(opt.value))
-        opt.name == "minutes" && (minutes = Int(opt.value))
-    end
+    text = String(option(i, "message", ""))
+    minutes = Int(option(i, "minutes", 5))
     # Acknowledge inside Discord's 3-second window before doing anything slow.
     defer(c, i; ephemeral=true)
 

@@ -191,6 +191,43 @@ A user's invocation of an application command, message component, or modal.
     attachment_size_limit::Int
 end
 
+export options, option
+
+"""
+    options(interaction) -> Vector{ApplicationCommandInteractionDataOption}
+
+The options of an application command interaction, or an empty vector when
+there are none — saves guarding against `missing` data. Also accepts an
+[`InteractionData`](@ref) or a subcommand option (to read its nested options).
+
+```julia
+for opt in options(interaction)
+    opt.name == "minutes" && (minutes = Int(opt.value))
+end
+```
+"""
+options(i::Interaction) = i.data === missing ? ApplicationCommandInteractionDataOption[] : options(i.data)
+options(d::InteractionData) = _options(d.options)
+options(o::ApplicationCommandInteractionDataOption) = _options(o.options)
+_options(x) = x === missing ? ApplicationCommandInteractionDataOption[] : x
+
+"""
+    option(interaction, name, default=missing)
+
+The value of the named option, or `default` when the user didn't provide it.
+Accepts anything [`options`](@ref) does.
+
+```julia
+minutes = option(interaction, "minutes", 5)
+```
+"""
+function option(x, name::AbstractString, default=missing)
+    for o in options(x)
+        o.name == name && return o.value
+    end
+    default
+end
+
 
 @discord_object struct InteractionCallback
     id::Snowflake

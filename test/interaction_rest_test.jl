@@ -141,6 +141,19 @@ const CALLBACK_RESPONSE = """{
         @test member.roles == [Snowflake(290926798626357999)]
 
         @test JSON3.read(JSON3.write(i), Interaction) == i
+
+        # options/option accessors
+        @test length(options(i)) == 2
+        @test option(i, "a") == 2 && option(i, "b") == 3
+        @test option(i, "nope") === missing
+        @test option(i, "nope", 42) == 42
+        @test options(opts[1]) == []   # a value option has no nested options
+        bare = Interaction(id=1, application_id=1, type=InteractionTypes.PING,
+                           token="t", version=1, app_permissions=Permissions(0),
+                           entitlements=[], authorizing_integration_owners=Dict{String,Snowflake}(),
+                           attachment_size_limit=8388608)
+        @test options(bare) == []      # no data at all
+        @test option(bare, "x", "d") == "d"
     end
 
     @testset "InteractionCallbackResponse round-trip" begin

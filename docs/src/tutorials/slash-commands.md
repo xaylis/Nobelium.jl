@@ -68,7 +68,7 @@ command_option(:string, "city", "Pick a city"; autocomplete=true)
 
 # in the handler:
 if i.type == InteractionTypes.APPLICATION_COMMAND_AUTOCOMPLETE
-    typed = lowercase(something(i.data.options[1].value, ""))
+    typed = lowercase(option(i, "city", ""))
     hits = filter(startswith(typed), CITIES)
     autocomplete(c, i, [choice(h, h) for h in first(hits, 25)])
 end

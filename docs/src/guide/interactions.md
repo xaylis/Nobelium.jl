@@ -30,10 +30,7 @@ on!(client, InteractionCreate) do c, ev
     i.type == InteractionTypes.APPLICATION_COMMAND || return
     i.data.name == "roll" || return
 
-    sides = 6
-    for opt in something(i.data.options, ())
-        opt.name == "sides" && (sides = Int(opt.value))
-    end
+    sides = Int(option(i, "sides", 6))
     respond(c, i; content="🎲 $(rand(1:sides))")
 end
 ```
