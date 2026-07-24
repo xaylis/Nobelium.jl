@@ -1,7 +1,7 @@
 name = "Nobelium"
 uuid = "c0be6d65-1a90-4794-95a4-5e06952dcdf2"
 authors = ["Nobelium contributors"]
-version = "0.2.0"
+version = "0.2.1"
 
 [deps]
 Dates = "ade2ca70-3891-5945-98fb-dc099432e06a"

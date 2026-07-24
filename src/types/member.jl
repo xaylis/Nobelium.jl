@@ -19,7 +19,8 @@ end
     GuildMember
 
 A user's membership in a guild. `user` is absent in message create/update
-events; `permissions` only appears inside interactions.
+events; `permissions` only appears inside interactions; the partial members in
+interaction resolved data omit `user`, `deaf`, and `mute`.
 """
 @discord_object struct GuildMember
     user::Optional{User}
@@ -29,8 +30,8 @@ events; `permissions` only appears inside interactions.
     roles::Vector{Snowflake}
     joined_at::Nullable{DateTime}
     premium_since::OptionalNullable{DateTime}
-    deaf::Bool
-    mute::Bool
+    deaf::Optional{Bool}
+    mute::Optional{Bool}
     flags::GuildMemberFlags
     pending::Optional{Bool}
     permissions::Optional{Permissions}

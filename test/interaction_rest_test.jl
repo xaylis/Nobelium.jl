@@ -48,6 +48,17 @@ const SLASH_COMMAND_INTERACTION = """{
                     "discriminator": "1337",
                     "avatar": "a_d5efa99b3eeaa7dd43acca82f5692432"
                 }
+            },
+            "members": {
+                "53908232506183680": {
+                    "roles": ["290926798626357999"],
+                    "premium_since": null,
+                    "permissions": "2147483647",
+                    "pending": false,
+                    "nick": null,
+                    "joined_at": "2017-03-13T19:19:14.040000+00:00",
+                    "flags": 0
+                }
             }
         }
     }
@@ -123,7 +134,11 @@ const CALLBACK_RESPONSE = """{
         @test opts[1].name == "a" && opts[1].value == 2
         @test opts[2].name == "b" && opts[2].value == 3
         @test d.resolved.users[Snowflake(53908232506183680)].username == "Mason"
-        @test d.resolved.members === missing
+        # Resolved members are partial: no user, deaf, or mute.
+        member = d.resolved.members[Snowflake(53908232506183680)]
+        @test member.user === missing
+        @test member.deaf === missing && member.mute === missing
+        @test member.roles == [Snowflake(290926798626357999)]
 
         @test JSON3.read(JSON3.write(i), Interaction) == i
     end
