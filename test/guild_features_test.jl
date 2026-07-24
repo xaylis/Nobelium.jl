@@ -226,7 +226,12 @@ end
         @test template.usage_count == 49605
         @test template.creator.username == "hoges"
         @test template.created_at == DateTime(2020, 4, 2, 21, 10, 38)
-        @test template.serialized_source_guild.name == "Friends & Family"
+        # The serialized guild is partial: no id, placeholder ids elsewhere.
+        source = template.serialized_source_guild
+        @test !haskey(source, "id")
+        @test source["name"] == "Friends & Family"
+        @test only(source["roles"])["name"] == "@everyone"
+        @test only(source["channels"])["id"] == 1
         @test template.is_dirty === nothing
         @test JSON3.read(JSON3.write(template), GuildTemplate) == template
     end
@@ -242,8 +247,13 @@ end
     end
 
     @testset "create_guild_from_guild_template" begin
-        guild_json = JSON3.write(JSON3.read(template_json).serialized_source_guild)
-        fake = fakehttp(response(200; body=guild_json))
+        # The endpoint returns a real guild — ids and full role/channel
+        # objects — unlike the template's serialized copy.
+        source = Dict(pairs(JSON3.read(template_json).serialized_source_guild))
+        source[:id] = "678070694164299796"
+        delete!(source, :roles)
+        delete!(source, :channels)
+        fake = fakehttp(response(200; body=JSON3.write(source)))
         guild = create_guild_from_guild_template(fastapi(fake), "hgM48av5Q69A"; name="Fam 2.0")
         req = only(fake.requests)
         @test req.method == "POST"

@@ -15,7 +15,6 @@
   "updated_at": "2020-05-01T17:57:38+00:00",
   "source_guild_id": "678070694164299796",
   "serialized_source_guild": {
-    "id": "678070694164299796",
     "name": "Friends & Family",
     "icon": null,
     "icon_hash": null,
@@ -28,7 +27,16 @@
     "verification_level": 0,
     "default_message_notifications": 0,
     "explicit_content_filter": 0,
-    "roles": [],
+    "roles": [
+      {
+        "id": 0,
+        "name": "@everyone",
+        "permissions": "104324689",
+        "color": 0,
+        "hoist": false,
+        "mentionable": false
+      }
+    ],
     "emojis": [],
     "features": [],
     "mfa_level": 0,
@@ -45,7 +53,19 @@
     "nsfw_level": 0,
     "premium_progress_bar_enabled": false,
     "safety_alerts_channel_id": null,
-    "channels": []
+    "channels": [
+      {
+        "id": 1,
+        "type": 0,
+        "name": "general",
+        "position": 0,
+        "topic": null,
+        "permission_overwrites": [],
+        "nsfw": false,
+        "rate_limit_per_user": 0,
+        "parent_id": null
+      }
+    ]
   },
   "is_dirty": null
 }
