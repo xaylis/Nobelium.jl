@@ -90,6 +90,12 @@ function handle_payload!(shard::Shard, text::AbstractString)
     nothing
 end
 
+# Included in parse-failure logs so bug reports carry the offending JSON.
+function _payload_excerpt(d, limit=4096)
+    s = redact(JSON3.write(d))
+    length(s) <= limit ? s : first(s, limit) * "…"
+end
+
 function _handle_dispatch!(shard::Shard, name::String, d)
     if name == "READY"
         shard.session_id = String(d.session_id)
@@ -102,7 +108,7 @@ function _handle_dispatch!(shard::Shard, name::String, d)
         try
             StructTypes.construct(T, d)
         catch e
-            @error "shard $(shard.id): failed to parse $name payload" exception = (e, catch_backtrace())
+            @error "shard $(shard.id): failed to parse $name payload" payload = _payload_excerpt(d) exception = (e, catch_backtrace())
             UnknownEvent(name, d)
         end
     end

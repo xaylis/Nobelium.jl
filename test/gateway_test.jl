@@ -1,4 +1,5 @@
 using JSON3
+using Logging
 using Nobelium: Shard, Opcode, handle_payload!
 
 # The shard state machine is transport-agnostic; feed it payloads directly and
@@ -140,6 +141,20 @@ const READY_D = """{
         @test ev isa UnknownEvent
         @test ev.name == "SOME_FUTURE_THING"
         @test ev.data.x == 1
+    end
+
+    @testset "parse failures log the payload" begin
+        client, shard = testshard()
+        got = Channel{Any}(1)
+        on!((c, ev) -> put!(got, ev), client, UnknownEvent)
+        logs, _ = Test.collect_test_logs() do
+            handle_payload!(shard, dispatch("GUILD_BAN_ADD", """{"guild_id": "1"}"""))
+        end
+        @test take!(got) isa UnknownEvent
+        record = only(filter(r -> r.level == Logging.Error, logs))
+        @test record.kwargs[:payload] == """{"guild_id":"1"}"""
+
+        @test Nobelium._payload_excerpt(Dict("k" => "v"^5000)) |> length <= 4097
     end
 
     @testset "wait_for" begin
