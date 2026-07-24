@@ -17,7 +17,7 @@ Let Discord do the filtering server-side:
 ```julia
 on!(client, Ready) do c, ev
     for g in ev.guilds
-        rules = list_auto_moderation_rules(c.api, g.id)
+        rules = list_auto_moderation_rules_for_guild(c.api, g.id)
         any(r -> r.name == "no invites", rules) && continue
         create_auto_moderation_rule(c.api, g.id;
             name="no invites",
