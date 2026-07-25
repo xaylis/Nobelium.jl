@@ -143,6 +143,17 @@ const READY_D = """{
         @test ev.data.x == 1
     end
 
+    @testset "RESUMED ignores its _trace payload" begin
+        client, shard = testshard()
+        got = Channel{Any}(1)
+        on!((c, ev) -> put!(got, ev), client, Resumed)
+        logs, _ = Test.collect_test_logs() do
+            handle_payload!(shard, dispatch("RESUMED", """{"_trace": ["[\\"gateway-prd\\"]"]}"""))
+        end
+        @test take!(got) isa Resumed
+        @test !any(r -> r.level == Logging.Error, logs)
+    end
+
     @testset "parse failures log the payload" begin
         client, shard = testshard()
         got = Channel{Any}(1)

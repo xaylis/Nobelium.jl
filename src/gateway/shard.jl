@@ -102,8 +102,10 @@ function _handle_dispatch!(shard::Shard, name::String, d)
         shard.resume_url = String(d.resume_gateway_url)
     end
     T = get(EVENT_TYPES, name, nothing)
-    event = if T === nothing || d === nothing
-        T === nothing ? UnknownEvent(name, d) : T()
+    event = if T === nothing
+        UnknownEvent(name, d)
+    elseif d === nothing || fieldcount(T) == 0 
+        T()
     else
         try
             StructTypes.construct(T, d)
