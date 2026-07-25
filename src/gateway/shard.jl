@@ -172,6 +172,7 @@ function run_shard!(shard::Shard)
     backoff = 1.0
     while shard.running
         code = nothing
+        dropped = nothing
         try
             HTTP.WebSockets.open(_gateway_url(shard); suppress_close_error=true) do ws
                 shard.ws = ws
@@ -183,6 +184,8 @@ function run_shard!(shard::Shard)
                         if e isa HTTP.WebSockets.WebSocketError &&
                            e.message isa HTTP.WebSockets.CloseFrameBody
                             code = Int(e.message.status)
+                        else
+                            dropped = e
                         end
                         break
                     end
@@ -191,10 +194,12 @@ function run_shard!(shard::Shard)
             end
         catch e
             e isa InterruptException && rethrow()
-            @debug "shard $(shard.id): connection error" exception = e
+            dropped = e
         end
         shard.ws = nothing
         shard.running || break
+        dropped === nothing ||
+            @warn "shard $(shard.id): connection dropped, reconnecting" exception = dropped
 
         if code in FATAL_CLOSE_CODES
             shard.fatal = GatewayClosedError(code, "", false)
