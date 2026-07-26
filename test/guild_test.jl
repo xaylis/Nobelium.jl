@@ -338,14 +338,24 @@ const ONBOARDING_JSON = """{
         @test ("X-Audit-Log-Reason" => "privacy") in req.headers
         @test sent_json(fake).enabled == false
 
+        # The widget lists partial channels — id, name and position only, with no
+        # `type` — alongside anonymized members.
         fake = fakehttp(response(200; body="""{
             "id": "290926798626999250", "name": "Test Server", "instant_invite": null,
-            "channels": [], "members": [], "presence_count": 20
+            "channels": [{"id": "459360976680091648", "name": "General", "position": 1}],
+            "members": [{"id": "0", "username": "Ali", "discriminator": "0000",
+                         "avatar": null, "status": "online",
+                         "avatar_url": "https://cdn.discordapp.com/widget-avatars/x.png"}],
+            "presence_count": 20
         }"""))
         widget = get_guild_widget(fastapi(fake), 290926798626999250)
         @test endswith(only(fake.requests).url, "/guilds/290926798626999250/widget.json")
         @test widget isa GuildWidget
         @test widget.presence_count == 20
+        @test only(widget.channels) isa GuildWidgetChannel
+        @test only(widget.channels).name == "General"
+        @test only(widget.channels).position == 1
+        @test only(widget.members).username == "Ali"
     end
 
     @testset "get_guild_widget_image" begin

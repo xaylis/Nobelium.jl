@@ -1,6 +1,6 @@
 # https://docs.discord.com/developers/resources/guild
 
-export Guild, GuildPreview, GuildWidget, GuildWidgetSettings, Ban,
+export Guild, GuildPreview, GuildWidget, GuildWidgetChannel, GuildWidgetSettings, Ban,
     WelcomeScreen, WelcomeScreenChannel, Integration, IntegrationAccount,
     IntegrationApplication, IncidentsData, VerificationLevel, VerificationLevels,
     DefaultMessageNotificationLevel, DefaultMessageNotificationLevels,
@@ -170,6 +170,18 @@ end
 end
 
 """
+    GuildWidgetChannel
+
+A voice channel as it appears in a guild's public widget, which carries only
+these three fields rather than a whole [`DiscordChannel`](@ref).
+"""
+@discord_object struct GuildWidgetChannel
+    id::Snowflake
+    name::String
+    position::Int
+end
+
+"""
     GuildWidget
 
 The public widget of a guild. Member fields are anonymized.
@@ -178,7 +190,7 @@ The public widget of a guild. Member fields are anonymized.
     id::Snowflake
     name::String
     instant_invite::Nullable{String}
-    channels::Vector{DiscordChannel}
+    channels::Vector{GuildWidgetChannel}
     members::Vector{User}
     presence_count::Int
 end

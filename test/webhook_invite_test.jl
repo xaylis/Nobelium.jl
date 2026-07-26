@@ -118,6 +118,22 @@ using Dates
             "https://discord.com/api/v10/webhooks/223704706495545344/sekrit/slack?thread_id=42"
         @test !any(h -> h.first == "Authorization", req.headers)
         @test sent_json(fake).text == "from slack"
+
+        # With wait=true the body is Slack's bare "ok", which is not JSON.
+        fake = fakehttp(response(200; body="ok"))
+        @test execute_slack_compatible_webhook(fastapi(fake), 223704706495545344, "sekrit";
+                                               wait=true, text="from slack") == "ok"
+    end
+
+    @testset "execute_github_compatible_webhook" begin
+        fake = fakehttp(response(204))
+        @test execute_github_compatible_webhook(fastapi(fake), 223704706495545344, "sekrit";
+                                                commits=[]) === nothing
+        req = only(fake.requests)
+        @test req.method == "POST"
+        @test req.url ==
+            "https://discord.com/api/v10/webhooks/223704706495545344/sekrit/github"
+        @test !any(h -> h.first == "Authorization", req.headers)
     end
 
     @testset "webhook messages" begin

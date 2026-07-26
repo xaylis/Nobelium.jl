@@ -114,26 +114,33 @@ end
     execute_slack_compatible_webhook(api, webhook_id, token; wait, thread_id, kwargs...)
 
 Post a Slack-format payload (`text`, `attachments`, ...) through the webhook.
+
+These compatibility endpoints answer in Slack's own dialect, not JSON: with
+`wait=true` the body is the bare string `"ok"`, and otherwise there is no body
+at all. The raw body is returned as a `String` (or `nothing` for an empty one).
 [Docs](https://docs.discord.com/developers/resources/webhook#execute-slackcompatible-webhook)
 """
 function execute_slack_compatible_webhook(api::API, webhook::SnowflakeLike, token::AbstractString;
                                           wait=missing, thread_id=missing, kwargs...)
     request(api, Route(:POST, "/webhooks/{webhook_id}/{webhook_token}/slack"),
             snowflake(webhook), token;
-            body=kwargs, query=(; wait, thread_id), into=Any, auth=:none)
+            body=kwargs, query=(; wait, thread_id), into=String, auth=:none)
 end
 
 """
     execute_github_compatible_webhook(api, webhook_id, token; wait, thread_id, kwargs...)
 
 Post a GitHub-format webhook event payload through the webhook.
+
+Like the Slack endpoint above, the response is not JSON - it is empty on
+success, so this returns `nothing`.
 [Docs](https://docs.discord.com/developers/resources/webhook#execute-githubcompatible-webhook)
 """
 function execute_github_compatible_webhook(api::API, webhook::SnowflakeLike, token::AbstractString;
                                            wait=missing, thread_id=missing, kwargs...)
     request(api, Route(:POST, "/webhooks/{webhook_id}/{webhook_token}/github"),
             snowflake(webhook), token;
-            body=kwargs, query=(; wait, thread_id), into=Any, auth=:none)
+            body=kwargs, query=(; wait, thread_id), into=String, auth=:none)
 end
 
 """
