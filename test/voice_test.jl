@@ -1,7 +1,15 @@
 using libsodium_jll   # activates NobeliumSodiumExt
 using Nobelium: rtp_header, encrypt_rtp_packet, encrypt_voice_frame,
     voice_encryption_available, SILENCE_FRAME, SAMPLES_PER_FRAME,
-    XCHACHA20_NONCE_BYTES, XCHACHA20_TAG_BYTES
+    XCHACHA20_NONCE_BYTES, XCHACHA20_TAG_BYTES, VoiceClient, _heartbeat_loop!
+
+# A websocket stand-in whose sends fail the way a dropped connection's do.
+struct DeadSocket end
+HTTP.WebSockets.send(::DeadSocket, ::Any) =
+    error("websocket closed with status 1006: websocket is closed")
+
+fake_voice_client() =
+    VoiceClient(Client("test-token"), Snowflake(1), Snowflake(2), "sess", "tok", "endpoint")
 
 @testset "voice" begin
     @testset "rtp header" begin
@@ -44,6 +52,27 @@ using Nobelium: rtp_header, encrypt_rtp_packet, encrypt_voice_frame,
         # trailing 4 bytes are the big-endian nonce counter
         @test packet[end-3:end] == [0x00, 0x00, 0x00, 0x07]
         @test length(packet) == 12 + 3 + XCHACHA20_TAG_BYTES + 4
+    end
+
+    @testset "heartbeat stops when the connection goes away" begin
+        # A beat landing on a socket that closed without a close frame must end
+        # the loop, not escape as an unhandled task error.
+        vc = fake_voice_client()
+        vc.running = true
+        vc.ws = DeadSocket()
+        @test _heartbeat_loop!(vc, 0.05) === nothing
+
+        # Clearing `running` ends it well inside one interval, so a disconnect
+        # never leaves a beat queued against a socket that is about to close.
+        vc2 = fake_voice_client()
+        vc2.running = true
+        vc2.ws = nothing          # send is never reached; the guard stops it
+        @test _heartbeat_loop!(vc2, 30) === nothing
+
+        vc3 = fake_voice_client()
+        vc3.running = false
+        vc3.ws = DeadSocket()
+        @test _heartbeat_loop!(vc3, 30) === nothing
     end
 
     @testset "OpusFrames iterates" begin

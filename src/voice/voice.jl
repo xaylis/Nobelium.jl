@@ -130,8 +130,32 @@ function _run_voice!(vc::VoiceClient)
         @error "voice connection failed" exception = (e, catch_backtrace())
     finally
         vc.running = false
+        vc.ws = nothing
         notify(vc.ready)
     end
+end
+
+# Heartbeats outlive nothing: the websocket can go away between any two beats,
+# and on a dropped connection it does so without a close frame. A send failure
+# here means the connection is gone, not that anything went wrong, so stop
+# quietly and leave the teardown to _run_voice!.
+function _heartbeat_loop!(vc::VoiceClient, interval::Real)
+    while vc.running && vc.ws !== nothing
+        try
+            _voice_payload(vc, VoiceOp.heartbeat,
+                           (; t = time_ns() ÷ 1_000_000, seq_ack = vc.seq_ack))
+        catch e
+            e isa InterruptException && rethrow()
+            return
+        end
+        # Wake often enough that disconnecting doesn't have to wait out a whole
+        # interval, which is when a beat would land on an already-closed socket.
+        deadline = time() + interval
+        while vc.running && vc.ws !== nothing && time() < deadline
+            sleep(clamp(deadline - time(), 0.01, 0.5))
+        end
+    end
+    nothing
 end
 
 function _handle_voice_payload!(vc::VoiceClient, payload)
@@ -140,11 +164,7 @@ function _handle_voice_payload!(vc::VoiceClient, payload)
 
     if op == VoiceOp.hello
         interval = payload.d.heartbeat_interval / 1000
-        errormonitor(@async while vc.running && vc.ws !== nothing
-            _voice_payload(vc, VoiceOp.heartbeat,
-                           (; t = time_ns() ÷ 1_000_000, seq_ack = vc.seq_ack))
-            sleep(interval)
-        end)
+        errormonitor(@async _heartbeat_loop!(vc, interval))
     elseif op == VoiceOp.ready
         vc.ssrc = UInt32(payload.d.ssrc)
         VOICE_ENCRYPTION_MODE in payload.d.modes ||
@@ -227,7 +247,13 @@ function play!(vc::VoiceClient, source::AudioSource)
             sleep(FRAME_MILLIS / 1000)
         end
     finally
-        set_speaking!(vc, false)
+        # If the connection dropped mid-playback this send fails too; don't let
+        # that replace the error that actually ended playback.
+        try
+            set_speaking!(vc, false)
+        catch e
+            e isa InterruptException && rethrow()
+        end
     end
     nothing
 end
