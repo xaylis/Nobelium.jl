@@ -1,7 +1,9 @@
 using libsodium_jll   # activates NobeliumSodiumExt
+using Sockets
 using Nobelium: rtp_header, encrypt_rtp_packet, encrypt_voice_frame,
     voice_encryption_available, SILENCE_FRAME, SAMPLES_PER_FRAME,
-    XCHACHA20_NONCE_BYTES, XCHACHA20_TAG_BYTES, VoiceClient, _heartbeat_loop!
+    XCHACHA20_NONCE_BYTES, XCHACHA20_TAG_BYTES, VoiceClient, _heartbeat_loop!,
+    _recv_probe
 
 # A websocket stand-in whose sends fail the way a dropped connection's do.
 struct DeadSocket end
@@ -9,7 +11,8 @@ HTTP.WebSockets.send(::DeadSocket, ::Any) =
     error("websocket closed with status 1006: websocket is closed")
 
 fake_voice_client() =
-    VoiceClient(Client("test-token"), Snowflake(1), Snowflake(2), "sess", "tok", "endpoint")
+    VoiceClient(Client("test-token"), Snowflake(1), Snowflake(2), Snowflake(3),
+                "sess", "tok", "endpoint")
 
 @testset "voice" begin
     @testset "rtp header" begin
@@ -73,6 +76,23 @@ fake_voice_client() =
         vc3.running = false
         vc3.ws = DeadSocket()
         @test _heartbeat_loop!(vc3, 30) === nothing
+    end
+
+    @testset "IP discovery probe times out instead of stalling" begin
+        # Nothing ever replies to this socket, which is what a blocked UDP path
+        # looks like. It must give up and say so, not hang the handshake.
+        udp = Sockets.UDPSocket()
+        Sockets.bind(udp, Sockets.ip"127.0.0.1", 0)
+        elapsed = @elapsed err = try
+            _recv_probe(udp, 0.5)
+            nothing
+        catch e
+            e
+        end
+        @test err !== nothing
+        @test occursin("outbound UDP", sprint(showerror, err))
+        @test elapsed < 3           # bounded by the timeout, not by Discord
+        close(udp)
     end
 
     @testset "OpusFrames iterates" begin

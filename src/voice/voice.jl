@@ -29,6 +29,7 @@ mutable struct VoiceClient
     const client::Client
     const guild_id::Snowflake
     const channel_id::Snowflake
+    const user_id::Snowflake
     const session_id::String
     const token::String
     const endpoint::String
@@ -44,13 +45,14 @@ mutable struct VoiceClient
     nonce_counter::UInt32
     speaking::Bool
     running::Bool
+    failure::Any                 # what ended the connection, for error reporting
     const ready::Base.Event
 end
 
-VoiceClient(client, guild_id, channel_id, session_id, token, endpoint) =
-    VoiceClient(client, guild_id, channel_id, session_id, token, endpoint,
+VoiceClient(client, guild_id, channel_id, user_id, session_id, token, endpoint) =
+    VoiceClient(client, guild_id, channel_id, user_id, session_id, token, endpoint,
                 nothing, nothing, "", 0, 0, UInt8[], -1,
-                rand(UInt16), rand(UInt32), 0, false, false, Base.Event())
+                rand(UInt16), rand(UInt32), 0, false, false, nothing, Base.Event())
 
 """
     connect_voice!(client, guild_id, channel_id; timeout=10) -> VoiceClient
@@ -91,13 +93,17 @@ function connect_voice!(client::Client, guild::SnowflakeLike, channel::Snowflake
     server[] === nothing && error("voice server update never arrived")
     server[].endpoint === nothing && error("voice server has no endpoint (try again later)")
 
-    vc = VoiceClient(client, gid, snowflake(channel),
+    vc = VoiceClient(client, gid, snowflake(channel), me,
                      state[].voice_state.session_id, server[].token,
                      String(server[].endpoint))
     vc.running = true
     errormonitor(@async _run_voice!(vc))
     wait(vc.ready)
-    vc.running || error("voice handshake failed")
+    if !vc.running
+        reason = vc.failure === nothing ? "the voice gateway closed before sending a session description" :
+                 sprint(showerror, vc.failure)
+        error("voice handshake failed: $reason")
+    end
     vc
 end
 
@@ -109,9 +115,11 @@ function _run_voice!(vc::VoiceClient)
     try
         HTTP.WebSockets.open(url; suppress_close_error=true) do ws
             vc.ws = ws
+            # The voice gateway expects identify promptly, so this must not wait
+            # on a REST call — connect_voice! already knows who we are.
             _voice_payload(vc, VoiceOp.identify, (;
                 server_id = vc.guild_id,
-                user_id = get_current_user(vc.client.api).id,
+                user_id = vc.user_id,
                 session_id = vc.session_id,
                 token = vc.token,
                 max_dave_protocol_version = 0,
@@ -119,7 +127,8 @@ function _run_voice!(vc::VoiceClient)
             while vc.running
                 msg = try
                     HTTP.WebSockets.receive(ws)
-                catch
+                catch e
+                    vc.failure === nothing && (vc.failure = e)
                     break
                 end
                 _handle_voice_payload!(vc, JSON3.read(msg isa AbstractString ? String(msg) : String(copy(msg))))
@@ -127,6 +136,7 @@ function _run_voice!(vc::VoiceClient)
         end
     catch e
         e isa InterruptException && rethrow()
+        vc.failure = e
         @error "voice connection failed" exception = (e, catch_backtrace())
     finally
         vc.running = false
@@ -181,6 +191,31 @@ function _handle_voice_payload!(vc::VoiceClient, payload)
     nothing
 end
 
+# This runs on the websocket reader, so blocking here stops us reading the
+# gateway too: a probe that never comes back would stall until Discord gave up on
+# the handshake, reporting nothing useful. Bound the wait and say what happened.
+function _recv_probe(udp::Sockets.UDPSocket, seconds::Real)
+    got = Ref{Any}(nothing)
+    done = Ref(false)
+    errormonitor(@async begin
+        try
+            got[] = Sockets.recv(udp)
+        catch e
+            got[] = e
+        finally
+            done[] = true
+        end
+    end)
+    deadline = time() + seconds
+    while !done[] && time() < deadline
+        sleep(0.02)
+    end
+    done[] || error("no reply to the UDP IP-discovery probe after $(seconds)s — " *
+                    "outbound UDP to Discord's voice servers is most likely blocked")
+    got[] isa Exception && throw(got[])
+    got[]::Vector{UInt8}
+end
+
 # Discord's IP discovery: a 74-byte probe carrying our ssrc comes back with
 # the public address the server sees.
 function _discover_ip!(vc::VoiceClient, server_ip::String, server_port::Int)
@@ -196,8 +231,12 @@ function _discover_ip!(vc::VoiceClient, server_ip::String, server_port::Int)
     probe[5:8] = reinterpret(UInt8, [hton(vc.ssrc)])
     Sockets.send(udp, Sockets.getaddrinfo(server_ip), server_port, probe)
 
-    response = Sockets.recv(udp)
-    ip = String(response[9:findfirst(iszero, response[9:72])+7])
+    response = _recv_probe(udp, 5)
+    length(response) >= 74 ||
+        error("IP-discovery reply was $(length(response)) bytes, expected at least 74")
+    stop = findfirst(iszero, @view response[9:72])
+    stop === nothing && error("IP-discovery reply had no null-terminated address")
+    ip = String(response[9:stop+7])
     port = Int(ntoh(reinterpret(UInt16, response[73:74])[1]))
     ip, port
 end
