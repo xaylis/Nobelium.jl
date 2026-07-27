@@ -168,10 +168,25 @@ _gateway_url(shard::Shard) =
     string(something(shard.resume_url, shard.client.gateway_url),
            "/?v=", API_VERSION, "&encoding=json")
 
+# A clean gateway close arrives as a WebSocketError wrapping a CloseFrameBody,
+# carrying the code and reason Discord sent. Anything else is a real transport
+# failure. Returns `nothing` for the latter so the caller can tell them apart.
+function _close_info(e)
+    e isa HTTP.WebSockets.WebSocketError || return nothing
+    body = e.message
+    body isa HTTP.WebSockets.CloseFrameBody || return nothing
+    # HTTP 1 names these `status`/`message`; HTTP 2 renamed them `code`/`reason`.
+    # Nobelium's compat allows both, so read whichever this build has rather than
+    # throwing a FieldError in the middle of handling a disconnect.
+    hasproperty(body, :status) ? (Int(body.status), String(body.message)) :
+                                 (Int(body.code), String(body.reason))
+end
+
 function run_shard!(shard::Shard)
     backoff = 1.0
     while shard.running
         code = nothing
+        reason = ""
         dropped = nothing
         try
             HTTP.WebSockets.open(_gateway_url(shard); suppress_close_error=true) do ws
@@ -181,11 +196,11 @@ function run_shard!(shard::Shard)
                     msg = try
                         HTTP.WebSockets.receive(ws)
                     catch e
-                        if e isa HTTP.WebSockets.WebSocketError &&
-                           e.message isa HTTP.WebSockets.CloseFrameBody
-                            code = Int(e.message.status)
-                        else
+                        info = _close_info(e)
+                        if info === nothing
                             dropped = e
+                        else
+                            code, reason = info
                         end
                         break
                     end
@@ -202,7 +217,7 @@ function run_shard!(shard::Shard)
             @warn "shard $(shard.id): connection dropped, reconnecting" exception = dropped
 
         if code in FATAL_CLOSE_CODES
-            shard.fatal = GatewayClosedError(code, "", false)
+            shard.fatal = GatewayClosedError(code, reason, false)
             shard.running = false
             notify(shard.ready)   # unblock anyone waiting on startup
             @error "shard $(shard.id): fatal gateway close" exception = shard.fatal
@@ -214,7 +229,7 @@ function run_shard!(shard::Shard)
             shard.session_id = nothing
             shard.seq = nothing
         end
-        code === nothing || @warn "shard $(shard.id): gateway closed with code $code, reconnecting"
+        code === nothing || @warn "shard $(shard.id): gateway closed with code $code, reconnecting" reason
         sleep(backoff * (0.75 + rand() / 2))
         backoff = min(backoff * 2, 60.0)
     end

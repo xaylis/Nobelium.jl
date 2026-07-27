@@ -100,8 +100,9 @@ function connect_voice!(client::Client, guild::SnowflakeLike, channel::Snowflake
     errormonitor(@async _run_voice!(vc))
     wait(vc.ready)
     if !vc.running
-        reason = vc.failure === nothing ? "the voice gateway closed before sending a session description" :
-                 sprint(showerror, vc.failure)
+        reason = vc.failure === nothing ?
+            "the voice gateway closed before sending a session description" :
+            sprint(showerror, vc.failure)
         error("voice handshake failed: $reason")
     end
     vc

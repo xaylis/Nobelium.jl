@@ -1,6 +1,8 @@
+using HTTP
 using JSON3
 using Logging
-using Nobelium: Shard, Opcode, handle_payload!
+using Nobelium: Shard, Opcode, handle_payload!, _close_info,
+    FATAL_CLOSE_CODES, RESET_SESSION_CODES
 
 # The shard state machine is transport-agnostic; feed it payloads directly and
 # capture what it sends back.
@@ -205,4 +207,28 @@ end
     @test get(s, 4, nothing) == "d"
     delete!(s, 4)
     @test get(s, 4, nothing) === nothing
+end
+
+@testset "gateway close frames" begin
+    # HTTP 1 names a close frame's fields `status`/`message`, HTTP 2 renamed them
+    # `code`/`reason`, and Nobelium's compat allows both. Reading the wrong pair
+    # threw inside the close branch, so `code` was never assigned: every close
+    # looked like an unexplained drop and the fatal and reset-session codes below
+    # were never acted on. This test only passes if both spellings are handled.
+    closed = HTTP.WebSockets.WebSocketError(
+        HTTP.WebSockets.CloseFrameBody(4004, "Authentication failed."))
+    @test _close_info(closed) == (4004, "Authentication failed.")
+
+    # A transport failure is not a close frame and must stay distinguishable.
+    @test _close_info(ErrorException("something else")) === nothing
+    # Only HTTP 1 lets a WebSocketError carry a bare string.
+    if String <: fieldtype(HTTP.WebSockets.WebSocketError, :message)
+        @test _close_info(HTTP.WebSockets.WebSocketError("connection reset")) === nothing
+    end
+
+    # The codes the reconnect loop branches on are reachable now.
+    @test first(_close_info(closed)) in FATAL_CLOSE_CODES
+    resumable = HTTP.WebSockets.WebSocketError(
+        HTTP.WebSockets.CloseFrameBody(4009, "Session timed out."))
+    @test first(_close_info(resumable)) in RESET_SESSION_CODES
 end
