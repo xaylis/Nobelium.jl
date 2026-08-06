@@ -52,4 +52,4 @@ Guides, tutorials, and the API reference live at
 
 ## License
 
-MIT - see [LICENSE](LICENSE).
+MIT. See [LICENSE](LICENSE).
